@@ -1,7 +1,6 @@
 import os
 import telebot
 from google import genai
-from google.genai import types
 
 
 BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN', '6996025306:AAFrVMSC-o6rA-CWof4u3roA3pDr6t1H4p4')
@@ -48,17 +47,15 @@ def handle_message(message):
         prompt += f"Пользователь: {user_text}\n"
         prompt += "Ассистент: "
         
-        # Create proper configuration object
-        config = types.GenerateContentConfig(
-            temperature=0.7,
-            max_output_tokens=2048
-        )
         
         # Generate response using proper config object
         response = client.models.generate_content(
             model="gemini-1.5-flash-latest",
             contents=prompt,
-            config=config
+            generation_config={
+                "temperature": 0.7,
+                "max_output_tokens": 2048
+            }
         )
         
         # Extract text from response
